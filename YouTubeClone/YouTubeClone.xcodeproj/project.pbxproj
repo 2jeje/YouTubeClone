@@ -20,6 +20,7 @@
 		C2D35C1A26A3FEE50053F136 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = C2D35C1926A3FEE50053F136 /* RxBlocking */; };
 		C2D35C1F26A405B60053F136 /* YouTubeApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D35C1E26A405B60053F136 /* YouTubeApi.swift */; };
 		C2D35C2226A406F80053F136 /* RxAlamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C2D35C2126A406F80053F136 /* RxAlamofire */; };
+		C2D35C2726A47C380053F136 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2D35C2626A47C380053F136 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 			files = (
 				C2D35C1626A3FEE50053F136 /* RxRelay in Frameworks */,
 				C2D35C1426A3FEE50053F136 /* RxSwift in Frameworks */,
+				C2D35C2726A47C380053F136 /* Kingfisher in Frameworks */,
 				C2D35C1826A3FEE50053F136 /* RxCocoa in Frameworks */,
 				C2D35C2226A406F80053F136 /* RxAlamofire in Frameworks */,
 				C228C15026A3F9F90041CBBE /* SnapKit in Frameworks */,
@@ -70,6 +72,8 @@
 		C228C13926A3F9A10041CBBE /* YouTubeClone */ = {
 			isa = PBXGroup;
 			children = (
+				C2D35C2426A4677F0053F136 /* Api */,
+				C2D35C2326A467610053F136 /* Model */,
 				C228C13A26A3F9A10041CBBE /* AppDelegate.swift */,
 				C228C13C26A3F9A10041CBBE /* SceneDelegate.swift */,
 				C228C13E26A3F9A10041CBBE /* ViewController.swift */,
@@ -77,9 +81,23 @@
 				C228C14326A3F9A40041CBBE /* Assets.xcassets */,
 				C228C14526A3F9A40041CBBE /* LaunchScreen.storyboard */,
 				C228C14826A3F9A40041CBBE /* Info.plist */,
-				C2D35C1E26A405B60053F136 /* YouTubeApi.swift */,
 			);
 			path = YouTubeClone;
+			sourceTree = "<group>";
+		};
+		C2D35C2326A467610053F136 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C2D35C2426A4677F0053F136 /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				C2D35C1E26A405B60053F136 /* YouTubeApi.swift */,
+			);
+			path = Api;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -105,6 +123,7 @@
 				C2D35C1726A3FEE50053F136 /* RxCocoa */,
 				C2D35C1926A3FEE50053F136 /* RxBlocking */,
 				C2D35C2126A406F80053F136 /* RxAlamofire */,
+				C2D35C2626A47C380053F136 /* Kingfisher */,
 			);
 			productName = YouTubeClone;
 			productReference = C228C13726A3F9A10041CBBE /* YouTubeClone.app */;
@@ -137,6 +156,7 @@
 				C228C14E26A3F9F90041CBBE /* XCRemoteSwiftPackageReference "SnapKit" */,
 				C2D35C1226A3FEE50053F136 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				C2D35C2026A406F80053F136 /* XCRemoteSwiftPackageReference "RxAlamofire" */,
+				C2D35C2526A47C380053F136 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = C228C13826A3F9A10041CBBE /* Products */;
 			projectDirPath = "";
@@ -394,6 +414,14 @@
 				minimumVersion = 6.1.2;
 			};
 		};
+		C2D35C2526A47C380053F136 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -426,6 +454,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C2D35C2026A406F80053F136 /* XCRemoteSwiftPackageReference "RxAlamofire" */;
 			productName = RxAlamofire;
+		};
+		C2D35C2626A47C380053F136 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C2D35C2526A47C380053F136 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
