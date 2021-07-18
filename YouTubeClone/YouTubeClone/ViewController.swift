@@ -1,5 +1,4 @@
 
-
 import UIKit
 import SnapKit
 import RxSwift
@@ -14,16 +13,16 @@ class ViewController: UIViewController {
     
     let viewModel = YouTubeVideoViewModel()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
         self.view.addSubview(topView)
         self.view.addSubview(videoTableView)
         
 
-        let citiesOb: Observable<[YouTubeVideo]> = Observable.of(viewModel.videos)
-        citiesOb.bind(to: videoTableView.rx.items(cellIdentifier: "videoCell")) { (index: Int, element: YouTubeVideo, cell: UITableViewCell) in
+        let videoOb: Observable<[YouTubeVideo]> = Observable.of(viewModel.videos)
+        videoOb.bind(to: videoTableView.rx.items(cellIdentifier: "videoCell")) { (index, element, cell) in
 
            // cell.textLabel?.text = element
 
@@ -32,11 +31,10 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupUI()
+        setupLayout()
     }
 
-    
-    func setupUI() {
+    func setupLayout() {
         topView.snp.makeConstraints { make in
             make.left.equalTo(self.view)
             make.right.equalTo(self.view)
@@ -63,6 +61,10 @@ class YouTubeVideoTableViewCell: UITableViewCell {
 
 class YouTubeVideoViewModel {
     var videos: [YouTubeVideo] = []
+    
+    func fetch() {
+        
+    }
     
 }
 
