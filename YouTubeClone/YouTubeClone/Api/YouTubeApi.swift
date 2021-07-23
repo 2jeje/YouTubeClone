@@ -23,7 +23,7 @@ final public class YouTubeApi {
         return RxAlamofire.requestData(.get, baseUrl, parameters: ["key": self.key, "part": "snippet", "chart": "mostPopular"])
             .map({ (response, data) -> (YouTubeVideoResponse?) in
                     // todo error case
-               // print(String(data:data, encoding: .utf8))
+                print(String(data:data, encoding: .utf8))
                     var result: YouTubeVideoResponse? = nil
                     do {
                         result = try JSONDecoder().decode(YouTubeVideoResponse.self, from: data)
@@ -55,18 +55,22 @@ struct YouTubeVideoItem: Codable {
 
 
 struct YouTubeVideoSnippet: Codable {
+    let channelId: String
     let title: String
-    let thumbnails: YouTubeVideoThumbnails
+    let thumbnails: YouTubeVideoThumbnails?
+    let channelTitle: String
 }
 
 
 struct YouTubeVideoThumbnails: Codable {
     //let default
-    let medium: YouTubeVideoThumbnail
-    let high: YouTubeVideoThumbnail
-    let standard: YouTubeVideoThumbnail
+    let medium: YouTubeVideoThumbnail?
+    let high: YouTubeVideoThumbnail?
+    let standard: YouTubeVideoThumbnail?
 }
 
 struct YouTubeVideoThumbnail: Codable {
     let url: String
 }
+
+
