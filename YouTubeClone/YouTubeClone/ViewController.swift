@@ -2,7 +2,6 @@
 import UIKit
 import SnapKit
 import RxSwift
-import RxCocoa
 import Kingfisher
 
 
@@ -28,12 +27,8 @@ class ViewController: UIViewController {
 
         viewModel.videoSubject.bind(to: videoTableView.rx.items(cellIdentifier: "videoCell", cellType: YouTubeVideoTableViewCell.self)) { (index, element, cell) in
             print("\(element.id)")
-            if let url = element.snippet.thumbnails?.medium?.url {
-                cell.update(url: url)
-            }
 
-            cell.updateTitle(title: element.snippet.title)
-            cell.updateChannelTitle(title: element.snippet.channelTitle)
+            cell.updateUI(viewModel: self.viewModel, item: element)
 
             
 //            if let url = element.snippet.t?.url {
@@ -47,7 +42,7 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.fetchData().subscribe(onSuccess: { response in
+        viewModel.fetchVideoData().subscribe(onSuccess: { response in
                     print("success")
                 }, onFailure: {_ in
                     print("fail")
@@ -77,8 +72,6 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate {
     
-
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
@@ -96,7 +89,9 @@ class YouTubeVideoTableViewCell: UITableViewCell {
     let descriptionView: UIView = UIView(frame: .zero)
     let descriptionImageView: UIImageView = UIImageView(frame: .zero)
     let descriptionTitleView: UILabel = UILabel(frame: .zero)
-    let descriptionChannelTitleView: UILabel = UILabel(frame: .zero)
+    let descriptionLabelView: UILabel = UILabel(frame: .zero)
+    
+    let disposeBag = DisposeBag()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -104,7 +99,7 @@ class YouTubeVideoTableViewCell: UITableViewCell {
         self.contentView.addSubview(descriptionView)
         self.descriptionView.addSubview(descriptionImageView)
         self.descriptionView.addSubview(descriptionTitleView)
-        self.descriptionView.addSubview(descriptionChannelTitleView)
+        self.descriptionView.addSubview(descriptionLabelView)
         
         thumbnailView.contentMode = .scaleAspectFill
         thumbnailView.snp.makeConstraints { make in
@@ -121,8 +116,6 @@ class YouTubeVideoTableViewCell: UITableViewCell {
             make.bottom.equalTo(self.contentView)
         }
         
-        descriptionView.backgroundColor = .blue
-        
         descriptionImageView.layer.masksToBounds = true
         descriptionImageView.layer.cornerRadius = 40 / 2
         
@@ -130,7 +123,7 @@ class YouTubeVideoTableViewCell: UITableViewCell {
             make.left.equalTo(self.descriptionView).inset(20)
             make.height.equalTo(40)
             make.width.equalTo(40)
-            make.top.equalTo(self.descriptionView).inset(10)
+            make.top.equalTo(self.descriptionView).inset(15)
         }
         
         descriptionTitleView.font = UIFont.boldSystemFont(ofSize: 16.0)
@@ -138,21 +131,20 @@ class YouTubeVideoTableViewCell: UITableViewCell {
         descriptionTitleView.lineBreakMode = .byWordWrapping
         
         descriptionTitleView.snp.makeConstraints { make in
-            make.left.equalTo(self.descriptionImageView).inset(20)
-            make.top.equalTo(self.descriptionView).inset(10)
+            make.left.equalTo(self.descriptionImageView.snp.right).offset(20)
+            make.top.equalTo(self.descriptionView).inset(15)
             make.right.equalTo(self.descriptionView).inset(20)
         }
         
-        descriptionChannelTitleView.font = UIFont.systemFont(ofSize: 13.0, weight: .regular)
-        descriptionChannelTitleView.numberOfLines = 1
+        descriptionLabelView.font = UIFont.systemFont(ofSize: 13.0, weight: .regular)
+        descriptionLabelView.numberOfLines = 1
         
-        descriptionChannelTitleView.snp.makeConstraints { make in
-            make.left.equalTo(self.descriptionImageView).inset(20)
+        descriptionLabelView.snp.makeConstraints { make in
+            make.left.equalTo(self.descriptionImageView.snp.right).offset(20)
             make.top.equalTo(self.descriptionTitleView.snp.bottom).offset(5)
             make.width.greaterThanOrEqualTo(50)
         }
         
-        descriptionChannelTitleView.backgroundColor = .red
     }
     
     required init?(coder: NSCoder) {
@@ -163,18 +155,39 @@ class YouTubeVideoTableViewCell: UITableViewCell {
         super.prepareForReuse()
     }
     
-    func update(url: String) {
-        thumbnailView.kf.setImage(with: URL(string: url))
-    }
     
-    func updateTitle(title: String) {
-        descriptionTitleView.text = title
-    }
-    
-    func updateChannelTitle(title: String) {
-        descriptionChannelTitleView.text = title
+    func updateUI(viewModel: YouTubeVideoViewModel, item: YouTubeVideoItem) {
+
+        if let url = item.snippet.thumbnails?.medium?.url {
+            thumbnailView.kf.setImage(with: URL(string: url))
+        }
+        
+        descriptionTitleView.text = item.snippet.title
+        descriptionLabelView.text = item.snippet.channelTitle + " · " + "조회수 " +  toSimplifyCount(item.statistics.viewCount) + "회"
+        
+        viewModel.fetchChannelData(id: item.snippet.channelId).subscribe(onSuccess: { response in
+            if let channel =  response?.items.first, let url = channel.snippet.thumbnails?.high?.url{
+                self.descriptionImageView.kf.setImage(with: URL(string: url))
+            }
+
+        }, onFailure: {_ in
+        }).disposed(by: disposeBag)
     }
 
+    
+    func toSimplifyCount(_ string: String) -> String {
+        
+        let num = Int(string) ?? 0
+        //1000
+        if string.count == 4 {
+            return "\(num / 1000) 천"
+        }
+        // 10000
+        else if string.count >= 5 {
+            return "\(num / 10000) 만"
+        }
+        return "\(num)"
+    }
     
 }
 
@@ -184,12 +197,15 @@ class YouTubeVideoViewModel {
     let videoSubject = BehaviorSubject<[YouTubeVideoItem]>(value: [])
     var videos: [YouTubeVideoItem] = []
 
-    func fetchData() -> Single<YouTubeVideoResponse?>{
+    func fetchVideoData() -> Single<YouTubeVideoListResponse?>{
         return YouTubeApi.shared.mostPopular().do( onSuccess: { response in
             self.videos = response?.items ?? []
-            print("\(self.videos.count)")
             self.videoSubject.on(.next(self.videos))
         })
+    }
+    
+    func fetchChannelData(id: String) -> Single<YouTubeChannelListResponse?> {
+        return YouTubeApi.shared.channel(id: id)
     }
     
 }
