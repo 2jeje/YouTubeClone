@@ -26,16 +26,7 @@ class ViewController: UIViewController {
         videoTableView.rowHeight = 280
 
         viewModel.videoSubject.bind(to: videoTableView.rx.items(cellIdentifier: "videoCell", cellType: YouTubeVideoTableViewCell.self)) { (index, element, cell) in
-            print("\(element.id)")
-
             cell.updateUI(viewModel: self.viewModel, item: element)
-
-            
-//            if let url = element.snippet.t?.url {
-//                cell.update(url: url)
-//            }
-            
-           // cell.textLabel?.text = element
 
         }.disposed(by: disposeBag)
     }
@@ -120,7 +111,7 @@ class YouTubeVideoTableViewCell: UITableViewCell {
         descriptionImageView.layer.cornerRadius = 40 / 2
         
         descriptionImageView.snp.makeConstraints { make in
-            make.left.equalTo(self.descriptionView).inset(20)
+            make.left.equalTo(self.descriptionView).inset(15)
             make.height.equalTo(40)
             make.width.equalTo(40)
             make.top.equalTo(self.descriptionView).inset(15)
@@ -131,7 +122,7 @@ class YouTubeVideoTableViewCell: UITableViewCell {
         descriptionTitleView.lineBreakMode = .byWordWrapping
         
         descriptionTitleView.snp.makeConstraints { make in
-            make.left.equalTo(self.descriptionImageView.snp.right).offset(20)
+            make.left.equalTo(self.descriptionImageView.snp.right).offset(15)
             make.top.equalTo(self.descriptionView).inset(15)
             make.right.equalTo(self.descriptionView).inset(20)
         }
@@ -140,7 +131,7 @@ class YouTubeVideoTableViewCell: UITableViewCell {
         descriptionLabelView.numberOfLines = 1
         
         descriptionLabelView.snp.makeConstraints { make in
-            make.left.equalTo(self.descriptionImageView.snp.right).offset(20)
+            make.left.equalTo(self.descriptionImageView.snp.right).offset(15)
             make.top.equalTo(self.descriptionTitleView.snp.bottom).offset(5)
             make.width.greaterThanOrEqualTo(50)
         }
@@ -165,13 +156,18 @@ class YouTubeVideoTableViewCell: UITableViewCell {
         descriptionTitleView.text = item.snippet.title
         descriptionLabelView.text = item.snippet.channelTitle + " · " + "조회수 " +  toSimplifyCount(item.statistics.viewCount) + "회"
         
-        viewModel.fetchChannelData(id: item.snippet.channelId).subscribe(onSuccess: { response in
-            if let channel =  response?.items.first, let url = channel.snippet.thumbnails?.high?.url{
-                self.descriptionImageView.kf.setImage(with: URL(string: url))
-            }
+        if let cacheUrl = viewModel.channels[item.snippet.channelId] {
+            self.descriptionImageView.kf.setImage(with: URL(string: cacheUrl))
+        }
+        else {
+            viewModel.fetchChannelData(id: item.snippet.channelId).subscribe(onSuccess: { response in
+                if let channel =  response?.items.first, let url = channel.snippet.thumbnails?.defaultKey.url{
+                    self.descriptionImageView.kf.setImage(with: URL(string: url))
+                }
 
-        }, onFailure: {_ in
-        }).disposed(by: disposeBag)
+            }, onFailure: {_ in
+            }).disposed(by: disposeBag)
+        }
     }
 
     
@@ -196,6 +192,7 @@ class YouTubeVideoViewModel {
     
     let videoSubject = BehaviorSubject<[YouTubeVideoItem]>(value: [])
     var videos: [YouTubeVideoItem] = []
+    var channels: [String: String] = [:]
 
     func fetchVideoData() -> Single<YouTubeVideoListResponse?>{
         return YouTubeApi.shared.mostPopular().do( onSuccess: { response in
@@ -205,8 +202,10 @@ class YouTubeVideoViewModel {
     }
     
     func fetchChannelData(id: String) -> Single<YouTubeChannelListResponse?> {
-        return YouTubeApi.shared.channel(id: id)
+        return YouTubeApi.shared.channel(id: id).do( onSuccess: { response in
+            self.channels[id] = response?.items.first?.snippet.thumbnails?.defaultKey.url
+        })
     }
-    
+
 }
 

@@ -69,23 +69,8 @@ struct YouTubeChannelItem: Codable {
 }
 
 struct YouTubeChannelSnippet: Codable {
-
-    let thumbnails: YouTubeChannelThumbnails?
+    let thumbnails: YouTubeThumbnails?
 }
-
-
-struct YouTubeChannelThumbnails: Codable {
-    //let default
-    let medium: YouTubeChannelThumbnail?
-    let high: YouTubeChannelThumbnail?
-    let standard: YouTubeChannelThumbnail?
-}
-
-struct YouTubeChannelThumbnail: Codable {
-    let url: String
-}
-
-
 
 struct YouTubeVideoListResponse: Codable {
     let items: [YouTubeVideoItem]
@@ -99,26 +84,32 @@ struct YouTubeVideoItem: Codable {
     let statistics: YouTubeVideoStatistics
 }
 
-
 struct YouTubeVideoSnippet: Codable {
     let channelId: String
     let title: String
-    let thumbnails: YouTubeVideoThumbnails?
+    let thumbnails: YouTubeThumbnails?
     let channelTitle: String
-}
-
-
-struct YouTubeVideoThumbnails: Codable {
-    //let default
-    let medium: YouTubeVideoThumbnail?
-    let high: YouTubeVideoThumbnail?
-    let standard: YouTubeVideoThumbnail?
-}
-
-struct YouTubeVideoThumbnail: Codable {
-    let url: String
 }
 
 struct YouTubeVideoStatistics: Codable {
     let viewCount: String
+}
+
+
+struct YouTubeThumbnails: Codable {
+    let defaultKey: YouTubeThumbnail
+    let medium: YouTubeThumbnail?
+    let high: YouTubeThumbnail?
+    let standard: YouTubeThumbnail?
+    
+    enum CodingKeys: String, CodingKey {
+        case defaultKey = "default"
+        case medium
+        case high
+        case standard
+    }
+}
+
+struct YouTubeThumbnail: Codable {
+    let url: String
 }
