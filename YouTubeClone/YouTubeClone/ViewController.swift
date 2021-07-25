@@ -25,6 +25,12 @@ class ViewController: UIViewController {
         videoTableView.rx.setDelegate(self).disposed(by: disposeBag)
         videoTableView.rowHeight = 300
 
+        
+        let headerTableView = UIView(frame: CGRect(x:0, y:0, width: videoTableView.bounds.width, height: 20))
+        headerTableView.backgroundColor = .blue
+        videoTableView.tableHeaderView = headerTableView
+        
+        
         viewModel.videoSubject.bind(to: videoTableView.rx.items(cellIdentifier: "videoCell", cellType: YouTubeVideoTableViewCell.self)) { (index, element, cell) in
             cell.updateUI(viewModel: self.viewModel, item: element)
 
@@ -66,6 +72,8 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
+    
+
     
 //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        return 280
@@ -114,7 +122,7 @@ class YouTubeVideoTableViewCell: UITableViewCell {
             make.left.equalTo(self.descriptionView).inset(15)
             make.height.equalTo(40)
             make.width.equalTo(40)
-            make.top.equalTo(self.descriptionView).inset(15)
+            make.top.equalTo(self.descriptionView).inset(10)
         }
 
         descriptionTitleView.font = UIFont.boldSystemFont(ofSize: 16.0)
@@ -123,7 +131,7 @@ class YouTubeVideoTableViewCell: UITableViewCell {
 
         descriptionTitleView.snp.makeConstraints { make in
             make.left.equalTo(self.descriptionImageView.snp.right).offset(15)
-            make.top.equalTo(self.descriptionView).inset(15)
+            make.top.equalTo(self.descriptionView).inset(10)
             make.right.equalTo(self.descriptionView).inset(20)
         }
 
