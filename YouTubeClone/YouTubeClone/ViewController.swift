@@ -7,8 +7,11 @@ import Kingfisher
 
 class ViewController: UIViewController {
 
-    var topView = UIView(frame: .zero)
-    var videoTableView = UITableView(frame: .zero)
+    let topView = UIView(frame: .zero)
+    let videoTableView = UITableView(frame: .zero)
+    var progressContainerView = UIView(frame: .zero)
+    
+    var progressContainerViewConstraint: Constraint!
     
     let disposeBag = DisposeBag()
     
@@ -20,16 +23,12 @@ class ViewController: UIViewController {
         
         self.view.addSubview(topView)
         self.view.addSubview(videoTableView)
+        self.view.addSubview(progressContainerView)
         
         videoTableView.register(YouTubeVideoTableViewCell.self, forCellReuseIdentifier: "videoCell")
         videoTableView.rx.setDelegate(self).disposed(by: disposeBag)
         videoTableView.rowHeight = 300
 
-        
-        let headerTableView = UIView(frame: CGRect(x:0, y:0, width: videoTableView.bounds.width, height: 20))
-        headerTableView.backgroundColor = .blue
-        videoTableView.tableHeaderView = headerTableView
-        
         
         viewModel.videoSubject.bind(to: videoTableView.rx.items(cellIdentifier: "videoCell", cellType: YouTubeVideoTableViewCell.self)) { (index, element, cell) in
             cell.updateUI(viewModel: self.viewModel, item: element)
@@ -57,6 +56,16 @@ class ViewController: UIViewController {
         }
         topView.backgroundColor = .red
         
+        progressContainerView.backgroundColor = .blue
+        
+        progressContainerView.snp.makeConstraints { make in
+            make.left.equalTo(self.view)
+            make.right.equalTo(self.view)
+            make.top.equalTo(self.topView.snp.bottom)
+            progressContainerViewConstraint = make.height.equalTo(0).constraint
+        }
+        
+        
         videoTableView.snp.makeConstraints{ make in
             make.left.equalTo(self.view)
             make.right.equalTo(self.view)
@@ -73,6 +82,13 @@ extension ViewController: UITableViewDelegate {
         
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offset = scrollView.contentOffset.y
+        if offset > 0 {
+            return
+        }
+        progressContainerViewConstraint.update(offset: -offset)
+    }
 
     
 //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
