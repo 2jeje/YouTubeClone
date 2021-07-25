@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         
         videoTableView.register(YouTubeVideoTableViewCell.self, forCellReuseIdentifier: "videoCell")
         videoTableView.rx.setDelegate(self).disposed(by: disposeBag)
-        videoTableView.rowHeight = 280
+        videoTableView.rowHeight = 300
 
         viewModel.videoSubject.bind(to: videoTableView.rx.items(cellIdentifier: "videoCell", cellType: YouTubeVideoTableViewCell.self)) { (index, element, cell) in
             cell.updateUI(viewModel: self.viewModel, item: element)
@@ -67,9 +67,9 @@ extension ViewController: UITableViewDelegate {
         
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 280
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 280
+//    }
 }
 
 
@@ -97,39 +97,39 @@ class YouTubeVideoTableViewCell: UITableViewCell {
             make.left.equalTo(self.contentView)
             make.right.equalTo(self.contentView)
             make.top.equalTo(self.contentView)
-            make.height.equalTo(200)
+            make.height.equalTo(220)
         }
-        
+
         descriptionView.snp.makeConstraints { make in
             make.left.equalTo(self.contentView)
             make.right.equalTo(self.contentView)
             make.top.equalTo(self.thumbnailView.snp.bottom)
             make.bottom.equalTo(self.contentView)
         }
-        
+
         descriptionImageView.layer.masksToBounds = true
         descriptionImageView.layer.cornerRadius = 40 / 2
-        
+
         descriptionImageView.snp.makeConstraints { make in
             make.left.equalTo(self.descriptionView).inset(15)
             make.height.equalTo(40)
             make.width.equalTo(40)
             make.top.equalTo(self.descriptionView).inset(15)
         }
-        
+
         descriptionTitleView.font = UIFont.boldSystemFont(ofSize: 16.0)
         descriptionTitleView.numberOfLines = 2
         descriptionTitleView.lineBreakMode = .byWordWrapping
-        
+
         descriptionTitleView.snp.makeConstraints { make in
             make.left.equalTo(self.descriptionImageView.snp.right).offset(15)
             make.top.equalTo(self.descriptionView).inset(15)
             make.right.equalTo(self.descriptionView).inset(20)
         }
-        
+
         descriptionLabelView.font = UIFont.systemFont(ofSize: 13.0, weight: .regular)
         descriptionLabelView.numberOfLines = 1
-        
+
         descriptionLabelView.snp.makeConstraints { make in
             make.left.equalTo(self.descriptionImageView.snp.right).offset(15)
             make.top.equalTo(self.descriptionTitleView.snp.bottom).offset(5)
