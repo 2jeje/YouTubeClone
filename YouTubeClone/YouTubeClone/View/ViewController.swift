@@ -58,17 +58,7 @@ class ViewController: UIViewController {
 
     func setupLayout() {
         
-        //        let test = UIView(frame: .zero)
-        //        self.view.addSubview(test)
-        //
-        //        test.snp.makeConstraints { make in
-        //            make.left.equalTo(self.view)
-        //            make.right.equalTo(self.view)
-        //            make.top.equalTo(self.view)
-        //            make.bottom.equalTo(topView.snp.top)
-        //          //  make.bottom.equalTo(self.view.sn)
-        //        }
-        //        test.backgroundColor = .red
+
         
         topView.snp.makeConstraints { make in
             make.left.equalTo(self.view)
@@ -113,6 +103,16 @@ class ViewController: UIViewController {
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         }
         
+        let statusBarView = UIView(frame: .zero)
+        self.view.addSubview(statusBarView)
+            
+        statusBarView.snp.makeConstraints { make in
+            make.left.equalTo(self.view)
+            make.right.equalTo(self.view)
+            make.top.equalTo(self.view)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+        }
+        statusBarView.backgroundColor = .white
     }
 }
 
