@@ -9,9 +9,11 @@ class ViewController: UIViewController {
 
     let topView = UIView(frame: .zero)
     let videoTableView = UITableView(frame: .zero)
-    var progressContainerView = UIView(frame: .zero)
     
+    var progressContainerView = UIView(frame: .zero)
     var progressContainerViewConstraint: Constraint!
+    var progressContainerImageViewConstraint: Constraint!
+    var progressImageView : UIImageView!
     
     let disposeBag = DisposeBag()
     
@@ -56,7 +58,17 @@ class ViewController: UIViewController {
         }
         topView.backgroundColor = .red
         
-        progressContainerView.backgroundColor = .blue
+        progressContainerView.backgroundColor = .gray
+        
+        progressImageView = UIImageView(frame: .zero)
+        progressContainerView.addSubview(progressImageView)
+        progressImageView.snp.makeConstraints { make in
+            make.width.equalTo(30)
+            make.height.equalTo(30)
+            progressContainerImageViewConstraint = make.top.equalToSuperview().inset(0).constraint
+            make.centerX.equalToSuperview()
+        }
+        progressImageView.isHidden = true
         
         progressContainerView.snp.makeConstraints { make in
             make.left.equalTo(self.view)
@@ -65,6 +77,7 @@ class ViewController: UIViewController {
             progressContainerViewConstraint = make.height.equalTo(0).constraint
         }
         
+        progressImageView.image = UIImage(named: "progress")
         
         videoTableView.snp.makeConstraints{ make in
             make.left.equalTo(self.view)
@@ -84,9 +97,14 @@ extension ViewController: UITableViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
-        if offset > 0 {
+        if offset >= 0 {
+            progressImageView.isHidden = true
             return
         }
+        progressImageView.isHidden = false
+
+        let progressImageOffet = min(-offset/5, 10)
+        progressContainerImageViewConstraint.update(offset: progressImageOffet)
         progressContainerViewConstraint.update(offset: -offset)
     }
 
