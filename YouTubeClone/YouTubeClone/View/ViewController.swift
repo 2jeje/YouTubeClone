@@ -16,6 +16,9 @@ class ViewController: UIViewController {
     var progressContainerImageViewTopConstraint: Constraint!
     var progressContainerImageViewWidthConstraint: Constraint!
     var progressContainerImageViewHeightConstraint: Constraint!
+    
+    var topViewTopConstraint: Constraint!
+    
     var progressView : UIActivityIndicatorView!
     
     
@@ -54,13 +57,26 @@ class ViewController: UIViewController {
     }
 
     func setupLayout() {
+        
+        //        let test = UIView(frame: .zero)
+        //        self.view.addSubview(test)
+        //
+        //        test.snp.makeConstraints { make in
+        //            make.left.equalTo(self.view)
+        //            make.right.equalTo(self.view)
+        //            make.top.equalTo(self.view)
+        //            make.bottom.equalTo(topView.snp.top)
+        //          //  make.bottom.equalTo(self.view.sn)
+        //        }
+        //        test.backgroundColor = .red
+        
         topView.snp.makeConstraints { make in
             make.left.equalTo(self.view)
             make.right.equalTo(self.view)
-            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            topViewTopConstraint = make.top.equalTo(self.view.safeAreaLayoutGuide).constraint
             make.height.equalTo(40)
         }
-        //topView.backgroundColor = .red
+        topView.layer.masksToBounds = true
         
         let logoImageView = UIImageView(frame: .zero)
         logoImageView.image = UIImage(named: "logo")
@@ -70,7 +86,7 @@ class ViewController: UIViewController {
             make.left.equalToSuperview().inset(10)
             make.centerY.equalToSuperview()
             make.width.equalTo(80)
-            make.height.equalTo(80 * 178 / 794)
+            make.height.equalTo(80 * 178 / 794) // logo size
         }
         
         progressView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
@@ -96,8 +112,8 @@ class ViewController: UIViewController {
             make.top.equalTo(topView.snp.bottom)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         }
+        
     }
-
 }
 
 extension ViewController: UITableViewDelegate {
@@ -108,11 +124,18 @@ extension ViewController: UITableViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
+        
+        // go down
         if offset >= 0 {
             progressView.isHidden = true
             progressView.stopAnimating()
+            let topOffSet = min(-offset/3, 0)
+            topViewTopConstraint.update(inset: topOffSet)
             return
         }
+        
+        let topOffSet = max(offset/3, 0)
+        topViewTopConstraint.update(inset: topOffSet)
         
         let progressImageOffset = min(-offset/5, 10)
         progressContainerImageViewTopConstraint.update(offset: progressImageOffset)
@@ -125,7 +148,7 @@ extension ViewController: UITableViewDelegate {
         progressView.isHidden = false
         progressView.alpha = -offset/50
         progressView.startAnimating()
-        
+
     }
 
     
