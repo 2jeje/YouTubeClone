@@ -16,7 +16,8 @@ class ViewController: UIViewController {
     var progressContainerImageViewTopConstraint: Constraint!
     var progressContainerImageViewWidthConstraint: Constraint!
     var progressContainerImageViewHeightConstraint: Constraint!
-    var progressImageView : UIImageView!
+    var progressView : UIActivityIndicatorView!
+    
     
     let disposeBag = DisposeBag()
     
@@ -61,17 +62,17 @@ class ViewController: UIViewController {
         }
         topView.backgroundColor = .red
         
-        progressContainerView.backgroundColor = .gray
+       // progressContainerView.backgroundColor = .gray
         
-        progressImageView = UIImageView(frame: .zero)
-        progressContainerView.addSubview(progressImageView)
-        progressImageView.snp.makeConstraints { make in
+        progressView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
+        progressContainerView.addSubview(progressView)
+        progressView.snp.makeConstraints { make in
             progressContainerImageViewWidthConstraint = make.width.equalTo(30).constraint
             progressContainerImageViewHeightConstraint = make.height.equalTo(30).constraint
             progressContainerImageViewTopConstraint = make.top.equalToSuperview().inset(0).constraint
             make.centerX.equalToSuperview()
         }
-        progressImageView.isHidden = true
+        progressView.isHidden = true
         
         progressContainerView.snp.makeConstraints { make in
             make.left.equalTo(self.view)
@@ -79,8 +80,6 @@ class ViewController: UIViewController {
             make.top.equalTo(self.topView.snp.bottom)
             progressContainerViewConstraint = make.height.equalTo(0).constraint
         }
-        
-        progressImageView.image = UIImage(named: "progress")
         
         videoTableView.snp.makeConstraints{ make in
             make.left.equalTo(self.view)
@@ -101,11 +100,11 @@ extension ViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
         if offset >= 0 {
-            progressImageView.isHidden = true
+            progressView.isHidden = true
+            progressView.stopAnimating()
             return
         }
         
-
         let progressImageOffset = min(-offset/5, 10)
         progressContainerImageViewTopConstraint.update(offset: progressImageOffset)
         progressContainerViewConstraint.update(offset: -offset)
@@ -114,8 +113,9 @@ extension ViewController: UITableViewDelegate {
         progressContainerImageViewWidthConstraint.update(offset: progressImageSize)
         progressContainerImageViewHeightConstraint.update(offset: progressImageSize)
         
-        progressImageView.isHidden = false
-        progressImageView.alpha = -offset/100
+        progressView.isHidden = false
+        progressView.alpha = -offset/50
+        progressView.startAnimating()
         
     }
 

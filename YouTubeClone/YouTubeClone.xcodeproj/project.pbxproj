@@ -63,6 +63,14 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		C204240426B57C7A00EAE80E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C228C13E26A3F9A10041CBBE /* ViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		C228C12E26A3F9A10041CBBE = {
 			isa = PBXGroup;
 			children = (
@@ -82,12 +90,12 @@
 		C228C13926A3F9A10041CBBE /* YouTubeClone */ = {
 			isa = PBXGroup;
 			children = (
+				C2D35C2326A467610053F136 /* Model */,
+				C204240426B57C7A00EAE80E /* View */,
 				C204240126B57C1600EAE80E /* ViewModel */,
 				C2D35C2426A4677F0053F136 /* Api */,
-				C2D35C2326A467610053F136 /* Model */,
 				C228C13A26A3F9A10041CBBE /* AppDelegate.swift */,
 				C228C13C26A3F9A10041CBBE /* SceneDelegate.swift */,
-				C228C13E26A3F9A10041CBBE /* ViewController.swift */,
 				C228C14026A3F9A10041CBBE /* Main.storyboard */,
 				C228C14326A3F9A40041CBBE /* Assets.xcassets */,
 				C228C14526A3F9A40041CBBE /* LaunchScreen.storyboard */,
