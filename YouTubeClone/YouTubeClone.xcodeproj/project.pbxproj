@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C204240326B57C2600EAE80E /* YouTubeVideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C204240226B57C2600EAE80E /* YouTubeVideoViewModel.swift */; };
 		C228C13B26A3F9A10041CBBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C228C13A26A3F9A10041CBBE /* AppDelegate.swift */; };
 		C228C13D26A3F9A10041CBBE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C228C13C26A3F9A10041CBBE /* SceneDelegate.swift */; };
 		C228C13F26A3F9A10041CBBE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C228C13E26A3F9A10041CBBE /* ViewController.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C204240226B57C2600EAE80E /* YouTubeVideoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeVideoViewModel.swift; sourceTree = "<group>"; };
 		C228C13726A3F9A10041CBBE /* YouTubeClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouTubeClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C228C13A26A3F9A10041CBBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C228C13C26A3F9A10041CBBE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +55,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C204240126B57C1600EAE80E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C204240226B57C2600EAE80E /* YouTubeVideoViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		C228C12E26A3F9A10041CBBE = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +82,7 @@
 		C228C13926A3F9A10041CBBE /* YouTubeClone */ = {
 			isa = PBXGroup;
 			children = (
+				C204240126B57C1600EAE80E /* ViewModel */,
 				C2D35C2426A4677F0053F136 /* Api */,
 				C2D35C2326A467610053F136 /* Model */,
 				C228C13A26A3F9A10041CBBE /* AppDelegate.swift */,
@@ -189,6 +200,7 @@
 				C228C13B26A3F9A10041CBBE /* AppDelegate.swift in Sources */,
 				C2D35C1F26A405B60053F136 /* YouTubeApi.swift in Sources */,
 				C228C13D26A3F9A10041CBBE /* SceneDelegate.swift in Sources */,
+				C204240326B57C2600EAE80E /* YouTubeVideoViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
