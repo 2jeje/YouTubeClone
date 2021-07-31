@@ -58,11 +58,20 @@ class ViewController: UIViewController {
             make.left.equalTo(self.view)
             make.right.equalTo(self.view)
             make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.height.equalTo(50)
+            make.height.equalTo(40)
         }
-        topView.backgroundColor = .red
+        //topView.backgroundColor = .red
         
-       // progressContainerView.backgroundColor = .gray
+        let logoImageView = UIImageView(frame: .zero)
+        logoImageView.image = UIImage(named: "logo")
+        topView.addSubview(logoImageView)
+        
+        logoImageView.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(10)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(80)
+            make.height.equalTo(80 * 178 / 794)
+        }
         
         progressView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
         progressContainerView.addSubview(progressView)
