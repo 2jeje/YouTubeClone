@@ -24,7 +24,7 @@ final public class YouTubeApi {
         return RxAlamofire.requestData(.get, videoListUrl, parameters: ["key": self.key, "part": "snippet,statistics", "chart": "mostPopular"])
             .map({ (response, data) -> (YouTubeVideoListResponse?) in
                     // todo error case
-                print(String(data:data, encoding: .utf8))
+           //     print(String(data:data, encoding: .utf8))
                     var result: YouTubeVideoListResponse? = nil
                     do {
                         result = try JSONDecoder().decode(YouTubeVideoListResponse.self, from: data)
@@ -42,7 +42,7 @@ final public class YouTubeApi {
         return RxAlamofire.requestData(.get, channelListUrl, parameters: ["key": self.key, "part": "snippet", "id": id])
                         .map({ (response, data) -> (YouTubeChannelListResponse?) in
                                 // todo error case
-                            print(String(data:data, encoding: .utf8))
+                        //    print(String(data:data, encoding: .utf8))
                                 var result: YouTubeChannelListResponse? = nil
                                 do {
                                     result = try JSONDecoder().decode(YouTubeChannelListResponse.self, from: data)

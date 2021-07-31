@@ -12,7 +12,9 @@ class ViewController: UIViewController {
     
     var progressContainerView = UIView(frame: .zero)
     var progressContainerViewConstraint: Constraint!
-    var progressContainerImageViewConstraint: Constraint!
+    var progressContainerImageViewTopConstraint: Constraint!
+    var progressContainerImageViewWidthConstraint: Constraint!
+    var progressContainerImageViewHeightConstraint: Constraint!
     var progressImageView : UIImageView!
     
     let disposeBag = DisposeBag()
@@ -63,9 +65,9 @@ class ViewController: UIViewController {
         progressImageView = UIImageView(frame: .zero)
         progressContainerView.addSubview(progressImageView)
         progressImageView.snp.makeConstraints { make in
-            make.width.equalTo(30)
-            make.height.equalTo(30)
-            progressContainerImageViewConstraint = make.top.equalToSuperview().inset(0).constraint
+            progressContainerImageViewWidthConstraint = make.width.equalTo(30).constraint
+            progressContainerImageViewHeightConstraint = make.height.equalTo(30).constraint
+            progressContainerImageViewTopConstraint = make.top.equalToSuperview().inset(0).constraint
             make.centerX.equalToSuperview()
         }
         progressImageView.isHidden = true
@@ -101,11 +103,19 @@ extension ViewController: UITableViewDelegate {
             progressImageView.isHidden = true
             return
         }
-        progressImageView.isHidden = false
+        
 
-        let progressImageOffet = min(-offset/5, 10)
-        progressContainerImageViewConstraint.update(offset: progressImageOffet)
+        let progressImageOffset = min(-offset/5, 10)
+        progressContainerImageViewTopConstraint.update(offset: progressImageOffset)
         progressContainerViewConstraint.update(offset: -offset)
+        
+        let progressImageSize = min(-offset/5, 30)
+        progressContainerImageViewWidthConstraint.update(offset: progressImageSize)
+        progressContainerImageViewHeightConstraint.update(offset: progressImageSize)
+        
+        progressImageView.isHidden = false
+        progressImageView.alpha = -offset/100
+        
     }
 
     
