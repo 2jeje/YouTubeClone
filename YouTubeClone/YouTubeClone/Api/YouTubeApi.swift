@@ -21,7 +21,7 @@ final public class YouTubeApi {
     
     func mostPopular() -> Single<YouTubeVideoListResponse?> {
         
-        return RxAlamofire.requestData(.get, videoListUrl, parameters: ["key": self.key, "part": "snippet,statistics", "chart": "mostPopular"])
+        return RxAlamofire.requestData(.get, videoListUrl, parameters: ["key": self.key, "part": "snippet,statistics", "chart": "mostPopular", "maxResults" : 50])
             .map({ (response, data) -> (YouTubeVideoListResponse?) in
                     // todo error case
            //     print(String(data:data, encoding: .utf8))

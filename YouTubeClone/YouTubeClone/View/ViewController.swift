@@ -118,39 +118,65 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate {
     
+
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
     
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+
+        // go up
+        if velocity.y < 0 {
+            topViewTopConstraint.update(inset: 0)
+        }
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
-        
-        // go down
-        if offset >= 0 {
-            progressView.isHidden = true
-            progressView.stopAnimating()
-            let topOffSet = min(-offset/3, 0)
-            topViewTopConstraint.update(inset: topOffSet)
+        let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView).y
+        if isTop(scrollView) {
+            topViewTopConstraint.update(inset: 0)
+            let progressImageOffset = min(-offset/5, 10)
+            progressContainerImageViewTopConstraint.update(offset: progressImageOffset)
+            progressContainerViewConstraint.update(offset: -offset)
+            
+            let progressImageSize = min(-offset/5, 30)
+            progressContainerImageViewWidthConstraint.update(offset: progressImageSize)
+            progressContainerImageViewHeightConstraint.update(offset: progressImageSize)
+            
+            progressView.isHidden = false
+            progressView.alpha = -offset/50
+            progressView.startAnimating()
             return
         }
         
-        let topOffSet = max(offset/3, 0)
-        topViewTopConstraint.update(inset: topOffSet)
+        // go down
+        if velocity < 0 {
+            let topOffSet = min(-offset/3, -30)
+            topViewTopConstraint.update(inset: topOffSet)
+        }
+    }
+    
+    func isBotton(_ scrollView: UIScrollView) -> Bool {
         
-        let progressImageOffset = min(-offset/5, 10)
-        progressContainerImageViewTopConstraint.update(offset: progressImageOffset)
-        progressContainerViewConstraint.update(offset: -offset)
-        
-        let progressImageSize = min(-offset/5, 30)
-        progressContainerImageViewWidthConstraint.update(offset: progressImageSize)
-        progressContainerImageViewHeightConstraint.update(offset: progressImageSize)
-        
-        progressView.isHidden = false
-        progressView.alpha = -offset/50
-        progressView.startAnimating()
-
+        let offset = scrollView.contentOffset.y
+        let height = scrollView.frame.size.height
+        let distanceFromBottom = scrollView.contentSize.height - offset
+        if distanceFromBottom < height {
+            return true
+        }
+        return false
     }
 
+    
+    func isTop(_ scrollView: UIScrollView) -> Bool {
+        let offset = scrollView.contentOffset.y
+        if offset <= 0 {
+            return true
+        }
+        return false
+    }
     
 //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        return 280
