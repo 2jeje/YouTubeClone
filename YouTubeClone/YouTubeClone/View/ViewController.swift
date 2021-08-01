@@ -27,6 +27,9 @@ class ViewController: UIViewController {
     let viewModel = YouTubeVideoViewModel()
     
     
+    
+    var previousOffset: CGFloat = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -75,8 +78,8 @@ class ViewController: UIViewController {
         logoImageView.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(10)
             make.centerY.equalToSuperview()
-            make.width.equalTo(80)
-            make.height.equalTo(80 * 178 / 794) // logo size
+            make.width.equalTo(85)
+            make.height.equalTo(85 * 178 / 794) // logo size
         }
         
         progressView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
@@ -117,7 +120,7 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UITableViewDelegate {
-    
+
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -127,8 +130,18 @@ extension ViewController: UITableViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
 
         // go up
+        print("ddd \(velocity.y) ")
         if velocity.y < 0 {
             topViewTopConstraint.update(inset: 0)
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        }
+        else {
+            topViewTopConstraint.update(inset: -30)
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
         }
     }
     
@@ -136,7 +149,11 @@ extension ViewController: UITableViewDelegate {
         let offset = scrollView.contentOffset.y
         let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView).y
         if isTop(scrollView) {
-            topViewTopConstraint.update(inset: 0)
+            print("test isTop")
+          //  UIView.animate(withDuration: 10.0) {
+                self.topViewTopConstraint.update(inset: 0)
+          //  }
+
             let progressImageOffset = min(-offset/5, 10)
             progressContainerImageViewTopConstraint.update(offset: progressImageOffset)
             progressContainerViewConstraint.update(offset: -offset)
@@ -148,14 +165,19 @@ extension ViewController: UITableViewDelegate {
             progressView.isHidden = false
             progressView.alpha = -offset/50
             progressView.startAnimating()
+            previousOffset = offset
             return
         }
-        
+      //  print("test \(velocity) \(offset)")
         // go down
         if velocity < 0 {
-            let topOffSet = min(-offset/3, -30)
-            topViewTopConstraint.update(inset: topOffSet)
+            //
+           // print("test \(velocity) \(offset) \(previousOffset) \(-(previousOffset - offset))")
+            //let topOffSet = min(-(previousOffset - offset), -30)
+            topViewTopConstraint.update(inset: -30)
         }
+        previousOffset = offset
+
     }
     
     func isBotton(_ scrollView: UIScrollView) -> Bool {
