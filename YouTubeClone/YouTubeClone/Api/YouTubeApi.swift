@@ -21,7 +21,8 @@ final public class YouTubeApi {
     
     func mostPopular() -> Single<YouTubeVideoListResponse?> {
         
-        return RxAlamofire.requestData(.get, videoListUrl, parameters: ["key": self.key, "part": "snippet,statistics", "chart": "mostPopular", "maxResults" : 50])
+        return RxAlamofire.requestData(.get, videoListUrl,
+                                       parameters: ["key": self.key, "part": "snippet,statistics, contentDetails", "chart": "mostPopular", "maxResults" : 50])
             .map({ (response, data) -> (YouTubeVideoListResponse?) in
                     // todo error case
            //     print(String(data:data, encoding: .utf8))
@@ -82,6 +83,7 @@ struct YouTubeVideoItem: Codable {
     let id: String
     let snippet: YouTubeVideoSnippet
     let statistics: YouTubeVideoStatistics
+    let contentDetails: YouTubeContentDetails
 }
 
 struct YouTubeVideoSnippet: Codable {
@@ -95,6 +97,9 @@ struct YouTubeVideoStatistics: Codable {
     let viewCount: String
 }
 
+struct YouTubeContentDetails: Codable {
+    let duration: String
+}
 
 struct YouTubeThumbnails: Codable {
     let defaultKey: YouTubeThumbnail
@@ -113,3 +118,4 @@ struct YouTubeThumbnails: Codable {
 struct YouTubeThumbnail: Codable {
     let url: String
 }
+

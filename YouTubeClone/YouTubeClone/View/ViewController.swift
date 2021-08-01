@@ -147,7 +147,6 @@ extension ViewController: UITableViewDelegate {
         let offset = scrollView.contentOffset.y
         let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView).y
         if isTop(scrollView) {
-            print("test isTop")
           //  UIView.animate(withDuration: 10.0) {
                 self.topViewTopConstraint.update(inset: 0)
           //  }
@@ -239,10 +238,11 @@ class YouTubeVideoTableViewCell: UITableViewCell {
         durationLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
         durationLabel.textColor = .white
         durationLabel.text = "0:00:00"
+        durationLabel.textAlignment = .center
         durationLabel.snp.makeConstraints { make in
             make.right.equalTo(self.contentView).inset(10)
             make.bottom.equalTo(thumbnailView).inset(10)
-            make.width.greaterThanOrEqualTo(40)
+            make.width.greaterThanOrEqualTo(10)
             make.height.equalTo(20)
         }
         
@@ -318,8 +318,32 @@ class YouTubeVideoTableViewCell: UITableViewCell {
             }, onFailure: {_ in
             }).disposed(by: disposeBag)
         }
+        durationLabel.text = toSimplifyDuration(item.contentDetails.duration)
+        durationLabel.sizeToFit()
     }
-
+    
+    func toSimplifyDuration(_ string: String) -> String {
+        var convertedDuration: String = ""
+        string.reversed().forEach {
+            c in
+            if c == "S" {
+                //continue
+            }
+            else if c == "M" || c == "H" {
+                convertedDuration = ":" + convertedDuration
+            }
+            else {
+                convertedDuration = "\(c)" + convertedDuration
+            }
+        }
+        convertedDuration.removeFirst(2)
+        
+        if !convertedDuration.contains(":") {
+            convertedDuration = "0:" + convertedDuration
+        }
+        
+        return convertedDuration
+    }
     
     func toSimplifyCount(_ string: String) -> String {
         
