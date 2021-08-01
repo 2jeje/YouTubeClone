@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C204240326B57C2600EAE80E /* YouTubeVideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C204240226B57C2600EAE80E /* YouTubeVideoViewModel.swift */; };
+		C204240626B66C2E00EAE80E /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C204240526B66C2E00EAE80E /* PaddingLabel.swift */; };
 		C228C13B26A3F9A10041CBBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C228C13A26A3F9A10041CBBE /* AppDelegate.swift */; };
 		C228C13D26A3F9A10041CBBE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C228C13C26A3F9A10041CBBE /* SceneDelegate.swift */; };
 		C228C13F26A3F9A10041CBBE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C228C13E26A3F9A10041CBBE /* ViewController.swift */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		C204240226B57C2600EAE80E /* YouTubeVideoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeVideoViewModel.swift; sourceTree = "<group>"; };
+		C204240526B66C2E00EAE80E /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		C228C13726A3F9A10041CBBE /* YouTubeClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouTubeClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C228C13A26A3F9A10041CBBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C228C13C26A3F9A10041CBBE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				C228C13E26A3F9A10041CBBE /* ViewController.swift */,
+				C204240526B66C2E00EAE80E /* PaddingLabel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C204240626B66C2E00EAE80E /* PaddingLabel.swift in Sources */,
 				C228C13F26A3F9A10041CBBE /* ViewController.swift in Sources */,
 				C228C13B26A3F9A10041CBBE /* AppDelegate.swift in Sources */,
 				C2D35C1F26A405B60053F136 /* YouTubeApi.swift in Sources */,

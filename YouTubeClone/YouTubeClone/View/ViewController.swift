@@ -60,9 +60,7 @@ class ViewController: UIViewController {
     }
 
     func setupLayout() {
-        
-
-        
+    
         topView.snp.makeConstraints { make in
             make.left.equalTo(self.view)
             make.right.equalTo(self.view)
@@ -209,6 +207,7 @@ extension ViewController: UITableViewDelegate {
 
 class YouTubeVideoTableViewCell: UITableViewCell {
     let thumbnailView: UIImageView = UIImageView(frame: .zero)
+    let durationLabel: PaddingLabel = PaddingLabel(frame: .zero)
     
     let descriptionView: UIView = UIView(frame: .zero)
     let descriptionImageView: UIImageView = UIImageView(frame: .zero)
@@ -220,6 +219,8 @@ class YouTubeVideoTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.contentView.addSubview(thumbnailView)
+        self.contentView.addSubview(durationLabel)
+        
         self.contentView.addSubview(descriptionView)
         self.descriptionView.addSubview(descriptionImageView)
         self.descriptionView.addSubview(descriptionTitleView)
@@ -232,7 +233,23 @@ class YouTubeVideoTableViewCell: UITableViewCell {
             make.top.equalTo(self.contentView)
             make.height.equalTo(220)
         }
-
+        
+        durationLabel.numberOfLines = 1
+        durationLabel.backgroundColor = .black
+        durationLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
+        durationLabel.textColor = .white
+        durationLabel.text = "0:00:00"
+        durationLabel.snp.makeConstraints { make in
+            make.right.equalTo(self.contentView).inset(10)
+            make.bottom.equalTo(thumbnailView).inset(10)
+            make.width.greaterThanOrEqualTo(40)
+            make.height.equalTo(20)
+        }
+        
+        durationLabel.textEdgeInsets = UIEdgeInsets(top: 0, left: 3, bottom: 0, right: 3)
+        durationLabel.clipsToBounds = true
+        durationLabel.layer.cornerRadius = 5.0
+        
         descriptionView.snp.makeConstraints { make in
             make.left.equalTo(self.contentView)
             make.right.equalTo(self.contentView)
