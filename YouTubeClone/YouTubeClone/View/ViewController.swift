@@ -128,9 +128,14 @@ extension ViewController: UITableViewDelegate {
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-
+        print("test \(velocity.y) \(scrollView.contentOffset.y)")
         // go up
         if velocity.y < 0 {
+            if isTop(scrollView) && scrollView.contentOffset.y < -50 {
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.impactOccurred()
+            }
+            
             totalTopViewConstraint = 0
             UIView.animate(withDuration: 0.3) {
                 self.view.layoutIfNeeded()
@@ -147,7 +152,7 @@ extension ViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y
         let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView).y
-        
+         
         if isTop(scrollView) {
             totalTopViewConstraint = 0
 
