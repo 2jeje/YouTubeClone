@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var progressContainerImageViewTopConstraint: Constraint!
     var progressContainerImageViewWidthConstraint: Constraint!
     var progressContainerImageViewHeightConstraint: Constraint!
+    var videoTableViewTopConstraint: Constraint!
     
     var topViewTopConstraint: Constraint!
     var totalTopViewConstraint: CGFloat = 0 {
@@ -104,7 +105,7 @@ class ViewController: UIViewController {
         videoTableView.snp.makeConstraints{ make in
             make.left.equalTo(self.view)
             make.right.equalTo(self.view)
-            make.top.equalTo(topView.snp.bottom)
+            videoTableViewTopConstraint = make.top.equalTo(topView.snp.bottom).constraint
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         }
         
@@ -128,12 +129,18 @@ extension ViewController: UITableViewDelegate {
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        print("test \(velocity.y) \(scrollView.contentOffset.y)")
         // go up
         if velocity.y < 0 {
             if isTop(scrollView) && scrollView.contentOffset.y < -50 {
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.impactOccurred()
+                videoTableViewTopConstraint.update(inset: -50)
+                
+                viewModel.fetchVideoData().subscribe(onSuccess: { [weak self] response in
+                    self?.videoTableViewTopConstraint.update(inset: 0)
+                }, onFailure: {[weak self] _ in
+                    self?.videoTableViewTopConstraint.update(inset: 0)
+                }).disposed(by: disposeBag)
             }
             
             totalTopViewConstraint = 0
